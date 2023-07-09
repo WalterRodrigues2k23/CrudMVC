@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ASPNETMVCCRUD.Models.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace ASPNETMVCCRUD.Data
 {
@@ -7,5 +8,7 @@ namespace ASPNETMVCCRUD.Data
         public MVCDbContext(DbContextOptions options) : base(options)
         {
         }
+
+        public DbSet<Employee> Employees { get; set; }
     }
 }
