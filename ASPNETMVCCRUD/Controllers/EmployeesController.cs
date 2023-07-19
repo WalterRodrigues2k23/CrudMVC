@@ -40,8 +40,20 @@ namespace ASPNETMVCCRUD.Controllers
                 DateOfBirth = addEmployeeRequest.DateOfBirth,
             };
 
-            await mvcDbContext.Employees.AddAsync(Employee);
-            await mvcDbContext.SaveChangesAsync();
+            mvcDbContext.Employees.Add(Employee);
+            try
+            {
+                await mvcDbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                // Captura a exceção interna para análise
+                var innerException = ex.InnerException;
+                // Faça o tratamento adequado da exceção, como registrar o erro ou retornar uma resposta apropriada para o cliente
+                // ...
+                throw; // Relevante se você quiser propagar a exceção para camadas superiores para lidar com ela
+            }
+
             return RedirectToAction("Index");
         }
 
@@ -50,7 +62,7 @@ namespace ASPNETMVCCRUD.Controllers
         {
             var employee = await mvcDbContext.Employees.FirstOrDefaultAsync(x=> x.Id == id);
 
-            if (employee == null)
+            if (employee != null)
             {
                 var viewModel = new UpdateEmployeeViewModel()
                 {
